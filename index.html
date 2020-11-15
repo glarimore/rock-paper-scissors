@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Rock Paper Scissors</title>
+  <meta name="author" content="Gustav Larimore">
+
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+
+  <link rel="stylesheet" href="main.css">
+
+</head>
+
+<script>
+
+  //An array to store possible values of rock, paper, and scissors
+  let rockPaperScissors = ["Rock", "Paper", "Scissors"];
+
+
+  //Function to generate a computer choice
+  function computerPlay() {
+    let randomSelection = Math.floor(Math.random() * 3);
+    return rockPaperScissors[randomSelection];
+  }
+
+
+  //Function to evaluate whether player or computer wins
+  function playRound (playerSelection, computerSelection) {
+    //Handle tie use caes
+
+    if (playerSelection.toLowerCase() == computerSelection.toLowerCase()) {
+      console.log(`Tie! ${playerSelection} ties ${computerSelection}!`);
+      return "tie"
+    }
+
+    //Handle cases where player chooses rock
+    else if (playerSelection.toLowerCase() == "rock") {
+      if (computerSelection.toLowerCase() == "paper") {
+        console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
+        return "computerWins";
+      }
+      else {
+        console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
+        return "playerWins";
+      }
+    }
+
+    //Handle cases where player chooses paper
+    else if (playerSelection.toLowerCase() == "paper") {
+      if (computerSelection.toLowerCase() == "scissors") {
+        console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
+        return "computerWins";
+      }
+      else {
+        console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
+        return "playerWins";
+      }
+    }
+
+    //Handle cases where player chooses scissors
+    else if (playerSelection.toLowerCase() == "scissors") {
+      if (computerSelection.toLowerCase() == "rock") {
+        console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
+        return "computerWins";
+      }
+      else {
+        console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
+        return "playerWins";
+      }
+    }
+  }
+
+  //Create a function for playing five games in a row and outputting results
+  function game() {
+    //create variables to store number if player wins, computer wins, and ties
+    let playerWins = 0;
+    let computerWins = 0;
+    let ties = 0;
+
+    //create a variable to store the winner of each game
+    let gameResult = "";
+
+    //prompt for a playerchoice and evaluate who won 5 times
+    for (i=1; i < 6; i++) {
+      playerSelection = window.prompt("Rock, Paper, Scissors -- pick one!");
+      computerSelection = computerPlay();
+
+      gameResult = playRound(playerSelection, computerSelection);
+      
+      if (gameResult == "playerWins") {
+        playerWins++;
+      }
+
+      else if (gameResult == "computerWins") {
+        computerWins++;
+      }
+
+      else {
+        ties++;
+      }
+    }
+
+    if (playerWins > computerWins) {
+      return `You win ${playerWins} - ${computerWins}!`;
+    }
+
+    else if (playerWins < computerWins) {
+      return `You lose ${playerWins} - ${computerWins}!`;
+    }
+
+    else {
+      return `You tie ${playerWins} - ${computerWins}!`;
+    }
+  }
+  
+
+
+</script>
+
+<body>
+  
+</body>
+
+</html>
