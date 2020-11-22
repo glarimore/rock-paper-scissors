@@ -8,15 +8,70 @@
 
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
-  <link rel="stylesheet" href="main.css">
-
 </head>
 
-<script>
+<body>
 
+  <h1>Rock, Paper, Scissors!</h1>
+
+  <div id='buttons'>
+    <button id='rock'>Rock</button>
+    <button id='paper'>Paper</button>
+    <button id='scissors'>Scissors</button>
+  </div>
+
+  <div id='player'>
+    <p>Player Selection</p>
+  </div>
+
+  <div id='computer'>
+    <p>Computer Selection</p>
+  </div>
+
+  <div id='result'>
+    <p>Game Result</p>
+  </div>
+
+  <div id='score'>
+    <p>Score</p>
+  </div>
+
+</body>
+
+<script>
   //An array to store possible values of rock, paper, and scissors
   let rockPaperScissors = ["Rock", "Paper", "Scissors"];
 
+  //An array to store the score -- player, computer, ties
+  let scoreBoard = [0,0,0]
+
+  //A place to store the winner of the most recent game
+  let lastWinner = '';
+
+  function updateDOM (playerSelection, computerSelection) {
+    //Update DOM with player selection and computer selection
+    const playerParagraph = document.querySelector('#player > p');
+    playerParagraph.textContent = `You chose ${playerSelection}`;
+
+    const computerParagraph = document.querySelector('#computer > p');
+    computerParagraph.textContent = `The computer chose ${computerSelection}`;
+    
+    const resultParagraph = document.querySelector('#result > p');
+    resultParagraph.textContent = `The winner of the last game is: ${lastWinner}`;
+
+    const scoreParagraph = document.querySelector('#score > p');
+    scoreParagraph.textContent = `The score is You: ${scoreBoard[0]}, Computer: ${scoreBoard[1]}, Ties: ${scoreBoard[2]}`;
+    
+    if (scoreBoard[0] > 4 || scoreBoard[1] > 4) {
+      if (scoreBoard[0] > scoreBoard[1]) {
+        scoreParagraph.textContent = `You win ${scoreBoard[0]} to ${scoreBoard[1]}, with ${scoreBoard[2]} ties!`;
+      } else {
+        scoreParagraph.textContent = `You lose ${scoreBoard[1]} to ${scoreBoard[0]}, with ${scoreBoard[2]} ties!`;
+      }
+
+    }
+    
+  }
 
   //Function to generate a computer choice
   function computerPlay() {
@@ -24,25 +79,28 @@
     return rockPaperScissors[randomSelection];
   }
 
-
   //Function to evaluate whether player or computer wins
   function playRound (playerSelection, computerSelection) {
-    //Handle tie use caes
-
+    
+    
+    //Handle tie use case
     if (playerSelection.toLowerCase() == computerSelection.toLowerCase()) {
       console.log(`Tie! ${playerSelection} ties ${computerSelection}!`);
-      return "tie"
+      scoreBoard[2]++;
+      lastWinner = 'Tie';
     }
 
     //Handle cases where player chooses rock
     else if (playerSelection.toLowerCase() == "rock") {
       if (computerSelection.toLowerCase() == "paper") {
         console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
-        return "computerWins";
+        scoreBoard[1]++;
+        lastWinner = 'Computer';
       }
       else {
         console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
-        return "playerWins";
+        scoreBoard[0]++;
+        lastWinner = 'Player';
       }
     }
 
@@ -50,11 +108,13 @@
     else if (playerSelection.toLowerCase() == "paper") {
       if (computerSelection.toLowerCase() == "scissors") {
         console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
-        return "computerWins";
+        scoreBoard[1]++;
+        lastWinner = 'Computer';
       }
       else {
         console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
-        return "playerWins";
+        scoreBoard[0]++;
+        lastWinner = 'Player';
       }
     }
 
@@ -62,64 +122,33 @@
     else if (playerSelection.toLowerCase() == "scissors") {
       if (computerSelection.toLowerCase() == "rock") {
         console.log(`You lose! ${computerSelection} beats ${playerSelection}!`);
-        return "computerWins";
+        scoreBoard[1]++;
+        lastWinner = 'Computer';
       }
       else {
         console.log(`You win! ${playerSelection} beats ${computerSelection}!`);
-        return "playerWins";
+        scoreBoard[0]++;
+        lastWinner = 'Player';
       }
     }
   }
+  
+  const buttons = document.querySelectorAll('button');
 
-  //Create a function for playing five games in a row and outputting results
-  function game() {
-    //create variables to store number if player wins, computer wins, and ties
-    let playerWins = 0;
-    let computerWins = 0;
-    let ties = 0;
-
-    //create a variable to store the winner of each game
-    let gameResult = "";
-
-    //prompt for a playerchoice and evaluate who won 5 times
-    for (i=1; i < 6; i++) {
-      playerSelection = window.prompt("Rock, Paper, Scissors -- pick one!");
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      //Reset the score board if someone has already won
+      if (scoreBoard[0] > 4 || scoreBoard[1] > 4) {
+        scoreBoard = [0,0,0];
+      }
+      //Generate a computer selection
       computerSelection = computerPlay();
-
-      gameResult = playRound(playerSelection, computerSelection);
-      
-      if (gameResult == "playerWins") {
-        playerWins++;
-      }
-
-      else if (gameResult == "computerWins") {
-        computerWins++;
-      }
-
-      else {
-        ties++;
-      }
-    }
-
-    if (playerWins > computerWins) {
-      return `You win ${playerWins} - ${computerWins}!`;
-    }
-
-    else if (playerWins < computerWins) {
-      return `You lose ${playerWins} - ${computerWins}!`;
-    }
-
-    else {
-      return `You tie ${playerWins} - ${computerWins}!`;
-    }
-  }
-  
-
-
+      //Play a round
+      playRound(button.id,computerSelection);
+      //Update the DOM
+      updateDOM(button.id,computerSelection);
+    });
+  });
 </script>
-
-<body>
-  
-</body>
 
 </html>
